@@ -2,17 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
-/**  added when merging prompt limits */
-use Config;
-use Carbon\Carbon;
-use App\Models\Prompt\Prompt;
-/**  end */
-
+/*  added when merging prompt limits */
 use App\Http\Controllers\Controller;
+/*  end */
+
 use App\Models\Character\Character;
 use App\Models\Currency\Currency;
 use App\Models\Item\Item;
 use App\Models\Loot\LootTable;
+use App\Models\Prompt\Prompt;
 use App\Models\Prompt\PromptCategory;
 use App\Models\Raffle\Raffle;
 use App\Models\Submission\Submission;
@@ -66,7 +64,7 @@ class SubmissionController extends Controller {
     public function getSubmission($id) {
         $submission = Submission::whereNotNull('prompt_id')->where('id', $id)->where('status', '!=', 'Draft')->first();
         $inventory = isset($submission->data['user']) ? parseAssetData($submission->data['user']) : null;
-         $prompt = Prompt::where('id', $submission->prompt_id)->first();
+        $prompt = Prompt::where('id', $submission->prompt_id)->first();
         if (!$submission) {
             abort(404);
         }
@@ -78,7 +76,7 @@ class SubmissionController extends Controller {
         $count['Month'] = Submission::submitted($prompt->id, $submission->user_id)->where('created_at', '>=', now()->startOfMonth())->count();
         $count['Year'] = Submission::submitted($prompt->id, $submission->user_id)->where('created_at', '>=', now()->startOfYear())->count();
 
-        if($prompt->limit_character) {
+        if ($prompt->limit_character) {
             $limit = $prompt->limit * Character::visible()->where('is_myo_slot', 0)->where('user_id', $submission->user_id)->count();
         } else {
             $limit = $prompt->limit;
@@ -99,11 +97,11 @@ class SubmissionController extends Controller {
             'tables'              => LootTable::orderBy('name')->pluck('name', 'id'),
             'raffles'             => Raffle::where('rolled_at', null)->where('is_active', 1)->orderBy('name')->pluck('name', 'id'),
             'submissionCount'     => Submission::where('prompt_id', $submission->prompt_id)->where('status', 'Approved')->where('user_id', $submission->user_id)->count(),
-            /** added when merging prompt limits */
-            'count' => $count,
+            /* added when merging prompt limits */
+            'count'  => $count,
             'prompt' => $prompt,
-            'limit' => $limit
-            /** end */
+            'limit'  => $limit,
+            /* end */
         ] : []));
     }
 
@@ -157,13 +155,13 @@ class SubmissionController extends Controller {
             'expanded_rewards' => config('lorekeeper.extensions.character_reward_expansion.expanded'),
             'characters'       => Character::visible(Auth::check() ? Auth::user() : null)->myo(0)->orderBy('slug', 'DESC')->get()->pluck('fullName', 'slug')->toArray(),
         ] + ($submission->status == 'Pending' ? [
-            'characterCurrencies' => Currency::where('is_character_owned', 1)->orderBy('sort_character', 'DESC')->pluck('name', 'id'),
-            'items'               => Item::orderBy('name')->pluck('name', 'id'),
-            'currencies'          => Currency::where('is_user_owned', 1)->orderBy('name')->pluck('name', 'id'),
-            'tables'              => LootTable::orderBy('name')->pluck('name', 'id'),
-            'raffles'             => Raffle::where('rolled_at', null)->where('is_active', 1)->orderBy('name')->pluck('name', 'id'),
+            'characterCurrencies'           => Currency::where('is_character_owned', 1)->orderBy('sort_character', 'DESC')->pluck('name', 'id'),
+            'items'                         => Item::orderBy('name')->pluck('name', 'id'),
+            'currencies'                    => Currency::where('is_user_owned', 1)->orderBy('name')->pluck('name', 'id'),
+            'tables'                        => LootTable::orderBy('name')->pluck('name', 'id'),
+            'raffles'                       => Raffle::where('rolled_at', null)->where('is_active', 1)->orderBy('name')->pluck('name', 'id'),
             'submissionCount'               => Submission::where('prompt_id', $id)->where('status', 'Approved')->where('user_id', $submission->user_id)->count(),
-            'rewardsData'         => isset($submission->data['rewards']) ? parseAssetData($submission->data['rewards']) : null,
+            'rewardsData'                   => isset($submission->data['rewards']) ? parseAssetData($submission->data['rewards']) : null,
         ] : []));
     }
 

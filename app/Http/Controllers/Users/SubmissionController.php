@@ -3,11 +3,8 @@
 namespace App\Http\Controllers\Users;
 
 use App\Facades\Settings;
-/** added when merging prompt limits */
-use DB;
-use Carbon\Carbon;
-use App\Models\Submission\SubmissionCharacter;
-/** end */
+/* added when merging prompt limits */
+/* end */
 use App\Http\Controllers\Controller;
 use App\Models\Character\Character;
 use App\Models\Currency\Currency;
@@ -179,17 +176,17 @@ class SubmissionController extends Controller {
         $count['Month'] = Submission::submitted($id, Auth::user()->id)->where('created_at', '>=', now()->startOfMonth())->count();
         $count['Year'] = Submission::submitted($id, Auth::user()->id)->where('created_at', '>=', now()->startOfYear())->count();
 
-        if($prompt->limit_character) {
+        if ($prompt->limit_character) {
             $limit = $prompt->limit * Character::visible()->where('is_myo_slot', 0)->where('user_id', Auth::user()->id)->count();
         } else {
             $limit = $prompt->limit;
         }
 
         return view('home._prompt', [
-            'prompt' => $prompt,
+            'prompt'           => $prompt,
             'submissionCount'  => Submission::where('prompt_id', $id)->where('status', 'Approved')->where('user_id', Auth::user()->id)->count(),
-            'count' => $count,
-            'limit' => $limit
+            'count'            => $count,
+            'limit'            => $limit,
         ]);
     }
 
