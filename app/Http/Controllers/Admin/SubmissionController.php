@@ -66,6 +66,7 @@ class SubmissionController extends Controller {
     public function getSubmission($id) {
         $submission = Submission::whereNotNull('prompt_id')->where('id', $id)->where('status', '!=', 'Draft')->first();
         $inventory = isset($submission->data['user']) ? parseAssetData($submission->data['user']) : null;
+         $prompt = Prompt::where('id', $submission->prompt_id)->first();
         if (!$submission) {
             abort(404);
         }

@@ -4,11 +4,12 @@
         @if (isset($staffView) && $staffView)
             <p>For reference, these are the default rewards for this prompt. The editable section above is <u>inclusive</u> of these rewards.</p>
             @if ($count)
-                <p>This user has completed this prompt <strong>{{ $count }}</strong> time{{ $count == 1 ? '' : 's' }}.</p>
+                <p>This user has completed this prompt <strong>{{ $submissionCount }}</strong> time{{ $submissionCount == 1 ? '' : 's' }}.</p>
                 @if($prompt->limit)
                 <p>They have now submitted this prompt {{ $prompt->limit_period ? $count[$prompt->limit_period] : $count['all'] }} out of {{ $limit }} times
                 {{ $prompt->limit_period ? 'for this '.strtolower($prompt->limit_period) : '' }}.
             @endif
+          @endif 
             <div class="{{ $prompt->limit ? 'text-danger' : '' }}">
             <p>{{ $prompt->limit ? 'Users can submit this prompt '.$prompt->limit.' time(s)' : 'Users can submit this prompt an unlimited number of times' }}
             {{ $prompt->limit_period ? ' per '.strtolower($prompt->limit_period) : '' }}
