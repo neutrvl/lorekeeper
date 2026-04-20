@@ -611,4 +611,16 @@ class CharacterController extends Controller {
 
         return redirect()->back();
     }
+
+    /**
+     * Shows the characters pets.
+     * 
+     * @param string $slug
+     * 
+     */
+    public function getCharacterPets($slug) {
+        return view('character.pets', [
+            'character'             => $this->character,
+        ]);
+    }
 }
