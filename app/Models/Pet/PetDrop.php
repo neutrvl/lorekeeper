@@ -31,6 +31,8 @@ class PetDrop extends Model {
      */
     protected $casts = [
         'next_day' => 'datetime',
+        'parameters' => 'array',
+
     ];
 
     /**********************************************************************************************

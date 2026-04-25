@@ -84,7 +84,7 @@ class UserPet extends Model {
      * Get the pet's pet drop data.
      */
     public function drops() {
-        if (!$this->pet->dropData) {
+                if (!$this->pet || !$this->pet->dropData) {
             return $this->belongsTo('App\Models\Loot\Loot', 'rewardable_id', 'loot_table_id')->whereNull('loot_table_id');
         }
         if (!PetDrop::where('user_pet_id', $this->id)->first()) {

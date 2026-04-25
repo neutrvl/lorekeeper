@@ -112,13 +112,13 @@ class PetDropData extends Model {
      *
      * @return array
      */
-    public function getDataAttribute() {
-        if (isset($this->attributes['data'])) {
-            return json_decode($this->attributes['data'], true);
-        } else {
-            return null;
-        }
+        public function getDataAttribute($value) {
+    
+    if (is_array($value)) {
+        return $value;
     }
+}
+
 
     /**
      * Check if the drop data is active or not.
